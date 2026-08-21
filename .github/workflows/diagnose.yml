@@ -1,0 +1,36 @@
+name: Diagnose Hostinger error
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HOSTINGER_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p ${{ secrets.HOSTINGER_PORT }} ${{ secrets.HOSTINGER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Check logs and permissions
+        run: |
+          ssh -p ${{ secrets.HOSTINGER_PORT }} -i ~/.ssh/id_ed25519 ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }} '
+            cd ~/domains/socialsureplug.com/public_html
+            echo "=== root .env exists? ==="
+            ls -la .env 2>/dev/null || echo "no .env at docroot"
+            echo "=== core/.env exists? ==="
+            ls -la core/.env 2>/dev/null || echo "no core/.env"
+            echo "=== parent dir .env? ==="
+            ls -la ../.env 2>/dev/null || echo "no ../.env"
+            echo "=== Laravel log tail ==="
+            tail -n 60 core/storage/logs/laravel.log 2>/dev/null || echo "no laravel.log"
+            echo "=== PHP error_log tail ==="
+            tail -n 60 core/error_log 2>/dev/null || echo "no error_log"
+            echo "=== storage perms ==="
+            ls -la core/storage
+            ls -la core/bootstrap/cache
+            echo "=== php artisan check ==="
+            php8.4 core/artisan --version 2>&1 || true
+          '
