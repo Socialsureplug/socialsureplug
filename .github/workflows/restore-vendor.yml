@@ -16,5 +16,20 @@ jobs:
 
       - name: Run composer install on server
         run: |
-          ssh -p ${{ secrets.HOSTINGER_PORT }} -i ~/.ssh/id_ed25519 ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }} \
-            "cd ~/domains/socialsureplug.com/public_html/core && composer install --no-dev --optimize-autoloader"
+          ssh -p ${{ secrets.HOSTINGER_PORT }} -i ~/.ssh/id_ed25519 ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }} '
+            cd ~/domains/socialsureplug.com/public_html/core
+            COMPOSER_BIN=$(command -v composer || command -v composer.phar)
+            echo "composer binary: $COMPOSER_BIN"
+            if command -v php8.4 >/dev/null 2>&1; then
+              php8.4 "$COMPOSER_BIN" install --no-dev --optimize-autoloader
+            elif [ -x /usr/bin/php8.4 ]; then
+              /usr/bin/php8.4 "$COMPOSER_BIN" install --no-dev --optimize-autoloader
+            elif [ -x /opt/alt/php84/usr/bin/php ]; then
+              /opt/alt/php84/usr/bin/php "$COMPOSER_BIN" install --no-dev --optimize-autoloader
+            else
+              echo "No PHP 8.4 binary found. Available php binaries:"
+              ls /usr/bin/php* 2>/dev/null
+              ls /opt/alt/php*/usr/bin/php 2>/dev/null
+              exit 1
+            fi
+          '
