@@ -15,7 +15,7 @@ jobs:
       - name: Deploy over SSH (rsync)
         uses: burnett01/rsync-deployments@7.0.1
         with:
-          switches: -avzr --delete --exclude=.git/ --exclude=.github/ --exclude=*.zip --exclude=*backup* --exclude=*.mov
+          switches: -avzr --delete --exclude=.git/ --exclude=.github/ --exclude=*.zip --exclude=*backup* --exclude=*.mov --exclude=core/vendor/ --exclude=core/node_modules/ --exclude=core/.env --exclude=core/.env.backup --exclude=core/.env.production --exclude=core/auth.json --exclude=core/storage/*.key --exclude=core/storage/pail --exclude=core/public/build/ --exclude=core/public/storage
           path: ./
           remote_path: ~/domains/socialsureplug.com/public_html/
           remote_host: ${{ secrets.HOSTINGER_HOST }}
