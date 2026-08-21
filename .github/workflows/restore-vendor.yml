@@ -1,0 +1,20 @@
+name: Restore Composer vendor on Hostinger
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  composer-install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HOSTINGER_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p ${{ secrets.HOSTINGER_PORT }} ${{ secrets.HOSTINGER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Run composer install on server
+        run: |
+          ssh -p ${{ secrets.HOSTINGER_PORT }} -i ~/.ssh/id_ed25519 ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }} \
+            "cd ~/domains/socialsureplug.com/public_html/core && composer install --no-dev --optimize-autoloader"
