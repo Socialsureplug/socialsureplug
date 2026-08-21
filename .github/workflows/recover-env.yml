@@ -1,0 +1,43 @@
+name: Recover .env from backup zip
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HOSTINGER_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p ${{ secrets.HOSTINGER_PORT }} ${{ secrets.HOSTINGER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Find and restore .env from backup zip
+        run: |
+          ssh -p ${{ secrets.HOSTINGER_PORT }} -i ~/.ssh/id_ed25519 ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }} '
+            cd ~/domains/socialsureplug.com/public_html
+            echo "=== Locating backup zip ==="
+            find . -iname "*backup*.zip" 2>/dev/null
+            echo "=== Listing .env entries inside zip ==="
+            ZIPFILE=$(find . -iname "*backup*.zip" | head -n1)
+            echo "Using zip: $ZIPFILE"
+            unzip -l "$ZIPFILE" | grep -i "\.env" || echo "no .env entries found in zip listing"
+            echo "=== Attempting extraction ==="
+            ENV_PATH=$(unzip -l "$ZIPFILE" | grep -oE "[^ ]*core/\.env$" | head -n1)
+            if [ -z "$ENV_PATH" ]; then
+              ENV_PATH=$(unzip -l "$ZIPFILE" | grep -oE "[^ ]*\.env$" | grep -v "\.env\." | head -n1)
+            fi
+            echo "Resolved .env path in zip: $ENV_PATH"
+            if [ -n "$ENV_PATH" ]; then
+              unzip -o "$ZIPFILE" "$ENV_PATH" -d /tmp/envrecover
+              echo "=== Extracted successfully, copying into place ==="
+              cp "/tmp/envrecover/$ENV_PATH" core/.env
+              chmod 644 core/.env
+              echo "=== Done. First few keys (values masked) ==="
+              sed -E "s/=.*/=[SET]/" core/.env | head -n 30
+            else
+              echo "COULD NOT FIND .env INSIDE ZIP"
+            fi
+          '
