@@ -24,7 +24,7 @@ jobs:
         run: |
           rsync -avzr --exclude='.git/' --exclude='.github/' \
             -e "ssh -p ${{ secrets.HOSTINGER_PORT }} -i ~/.ssh/id_ed25519" \
-            "${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }}:~/public_html/" ./
+            "${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }}:~/domains/socialsureplug.com/public_html/" ./
 
       - name: Commit changes
         run: |
