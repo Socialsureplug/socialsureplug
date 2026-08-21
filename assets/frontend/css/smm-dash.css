@@ -1,0 +1,222 @@
+/* Boost Socials (SMM) page */
+.smm-page .smm-card {
+    margin-top: 20px;
+}
+
+.smm-page .smm-card .card {
+    overflow: visible;
+}
+
+.smm-hero {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.smm-hero-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(255, 132, 50, 0.14);
+    border: 1.5px solid var(--primary-color);
+    color: var(--primary-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+}
+
+.smm-hero-text .title {
+    margin: 0 0 4px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.smm-hero-text .desc {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.smm-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0;
+}
+
+.smm-tab {
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+}
+
+.smm-tab:hover {
+    color: var(--text-primary);
+}
+
+.smm-tab.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.smm-tab i {
+    font-size: 18px;
+}
+
+.smm-panel {
+    display: none;
+}
+
+.smm-panel.active {
+    display: block;
+}
+
+.smm-order-form .form-grid {
+    margin-bottom: 20px;
+}
+
+.smm-order-form .form-group .hint {
+    margin-top: 6px;
+    margin-bottom: 0;
+    font-size: 12px;
+    display: block;
+}
+
+.smm-checkbox-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.smm-checkbox-wrap input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.smm-form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: var(--border);
+}
+
+.smm-summary-box {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 14px 20px;
+    border: var(--border);
+}
+
+.smm-summary-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.smm-summary-amount {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary-color);
+}
+
+.smm-mass-card .smm-mass-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.smm-mass-card .smm-mass-desc.smm-mass-example {
+    margin-top: -8px;
+    margin-bottom: 16px;
+}
+
+.smm-mass-card .smm-mass-desc code {
+    background: var(--bg-secondary);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--text-primary);
+    border: var(--border);
+}
+
+.smm-mass-card textarea.form-control {
+    min-height: 140px;
+    padding: 16px 20px;
+    resize: vertical;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.smm-mass-card .form-group {
+    margin-bottom: 16px;
+}
+
+.smm-mass-card .smm-form-footer {
+    margin-top: 20px;
+}
+
+.select-item.selected {
+    background-color: rgba(255, 132, 50, 0.15);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.select-item.selected:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+@media (max-width: 640px) {
+    .smm-hero {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .smm-tabs {
+        flex-wrap: wrap;
+    }
+
+    .smm-tab {
+        flex: 1;
+        min-width: 0;
+        justify-content: center;
+    }
+
+    .smm-form-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .smm-summary-box {
+        text-align: center;
+    }
+}
